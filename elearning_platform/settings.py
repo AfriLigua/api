@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
+    'drf_spectacular_sidecar',
     
     'elearning_platform.accounts',
     'elearning_platform.courses',
@@ -32,6 +33,15 @@ INSTALLED_APPS = [
     'elearning_platform.notifications',
     'elearning_platform.analytics',
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'AfriLingua API',
+    'DESCRIPTION': 'API documentation for AfriLingua e-learning platform',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
