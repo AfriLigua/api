@@ -31,3 +31,5 @@ stripe==7.4.0
 tzdata==2025.2
 uritemplate==4.2.0
 wheel==0.45.1
+whitenoise==7.1.0
+
