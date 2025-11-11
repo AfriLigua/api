@@ -171,13 +171,13 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@elearning.com')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='afriligua@gmail.com')
 
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY', default='')
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY', default='')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
 
-PLATFORM_FEE_PERCENTAGE = config('PLATFORM_FEE_PERCENTAGE', default=15, cast=int)
+PLATFORM_FEE_PERCENTAGE = config('PLATFORM_FEE_PERCENTAGE', default=33, cast=int)
 DEFAULT_CURRENCY = config('DEFAULT_CURRENCY', default='USD')
 
 BOOKING_REFUND_CUTOFF_HOURS = 24
