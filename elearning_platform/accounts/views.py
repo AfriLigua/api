@@ -59,29 +59,31 @@ class TutorRegistrationView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
+from .serializers import LoginSerializer, UserSerializer
+
 class LoginView(APIView):
+    serializer_class = LoginSerializer
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
 
         user = authenticate(request, email=email, password=password)
-        if user is None:
+        if not user:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        if user.role == 'tutor' and hasattr(user, 'tutor_profile'):
-            if user.tutor_profile.approval_status != 'approved':
-                return Response({'error': 'Your account is pending admin approval.'}, status=status.HTTP_403_FORBIDDEN)
 
         refresh = RefreshToken.for_user(user)
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data
-        })
+        }, status=status.HTTP_200_OK)
 
-
+        
 class PasswordResetRequestView(APIView):
     permission_classes = [permissions.AllowAny]
 
@@ -108,7 +110,7 @@ from django.conf import settings
 from .models import CustomUser
 from .serializers import UserSerializer
 from django.contrib.auth.models import Group
-
+from .serializers import AdminLoginSerializer
 
 class AdminRegistrationView(generics.CreateAPIView):
     """
@@ -146,35 +148,85 @@ class AdminRegistrationView(generics.CreateAPIView):
             'email': user.email
         }, status=status.HTTP_201_CREATED)
 
-
+# ------------------- ADMIN LOGIN -------------------
 class AdminLoginView(APIView):
-    """
-    Login for Admin Counsel users
-    """
+    serializer_class = AdminLoginSerializer
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
 
         user = authenticate(request, email=email, password=password)
-
-        if user is None:
-            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        if not user.is_staff and not user.is_superuser:
-            return Response({'error': 'You do not have admin access'}, status=status.HTTP_403_FORBIDDEN)
+        if not user or user.role != 'admin':
+            return Response({'error': 'Invalid credentials or not an admin'}, status=status.HTTP_401_UNAUTHORIZED)
 
         refresh = RefreshToken.for_user(user)
-
-        # Send login alert email
-        subject = "AfriLingua Admin Login Alert"
-        message = render_to_string('emails/admin_login_alert.html', {'user': user})
-        send_mail(subject, '', settings.DEFAULT_FROM_EMAIL, [user.email], html_message=message)
-
         return Response({
-            'message': 'Admin login successful',
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data
         }, status=status.HTTP_200_OK)
+
+
+from rest_framework import viewsets, status, filters
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import TutorProfile, StudentProfile
+from .serializers import TutorProfileSerializer, StudentProfileSerializer
+from .permissions import IsAdmin
+
+
+# -------------------------------
+# Tutors CRUD + Approve/Reject
+# -------------------------------
+class TutorViewSet(viewsets.ModelViewSet):
+    queryset = TutorProfile.objects.all()
+    serializer_class = TutorProfileSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['approval_status', 'is_featured']
+    search_fields = ['user__first_name', 'user__last_name', 'skills', 'bio']
+    ordering_fields = ['rating', 'created_at']
+
+    def get_permissions(self):
+        if self.action in ['approve', 'reject']:
+            permission_classes = [IsAdmin]
+        else:
+            permission_classes = [permissions.IsAuthenticated]
+        return [p() for p in permission_classes]
+
+    @action(detail=True, methods=['post'], url_path='approve')
+    def approve(self, request, pk=None):
+        tutor = self.get_object()
+        tutor.approval_status = 'approved'
+        tutor.save()
+        # TODO: Send email notification to tutor
+        return Response({'status': 'Tutor approved'})
+
+    @action(detail=True, methods=['post'], url_path='reject')
+    def reject(self, request, pk=None):
+        tutor = self.get_object()
+        tutor.approval_status = 'rejected'
+        tutor.save()
+        # TODO: Send email notification to tutor
+        return Response({'status': 'Tutor rejected'})
+
+
+# -------------------------------
+# Students CRUD
+# -------------------------------
+class StudentViewSet(viewsets.ModelViewSet):
+    queryset = StudentProfile.objects.all()
+    serializer_class = StudentProfileSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['user__first_name', 'user__last_name', 'language', 'country']
+    ordering_fields = ['created_at']
+
+    def get_permissions(self):
+        # Only admin can list all students
+        permission_classes = [IsAdmin]
+        return [p() for p in permission_classes]

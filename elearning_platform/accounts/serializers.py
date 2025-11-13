@@ -10,6 +10,18 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'email_verified', 'created_at']
 
 
+
+class AdminLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+
+
 class StudentRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -40,10 +52,10 @@ class StudentRegistrationSerializer(serializers.ModelSerializer):
 class TutorRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
-    cv = serializers.FileField(required=True)
-    certificate = serializers.FileField(required=True)
-    bio = serializers.CharField(required=False, allow_blank=True)
-    skills = serializers.CharField(required=False, allow_blank=True)
+    cv = serializers.FileField(required=False, allow_null=True)
+    certificate = serializers.FileField(required=False, allow_null=True)
+    bio = serializers.CharField(required=True)
+    skills = serializers.CharField(required=True)
 
     class Meta:
         model = CustomUser
@@ -56,8 +68,8 @@ class TutorRegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
-        cv = validated_data.pop('cv')
-        certificate = validated_data.pop('certificate')
+        cv = validated_data.pop('cv', None)
+        certificate = validated_data.pop('certificate', None)
         bio = validated_data.pop('bio', '')
         skills = validated_data.pop('skills', '')
         

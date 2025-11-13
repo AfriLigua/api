@@ -1,6 +1,15 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import StudentRegistrationView, AdminRegistrationView, TutorRegistrationView, AdminLoginView,  LoginView 
+from .views import (
+    TutorViewSet, StudentViewSet,
+    StudentRegistrationView, AdminRegistrationView,
+    TutorRegistrationView, AdminLoginView, LoginView
+)
+
+router = DefaultRouter()
+router.register(r'tutors', TutorViewSet, basename='tutors')
+router.register(r'students', StudentViewSet, basename='students')
 
 urlpatterns = [
     path('register/student/', StudentRegistrationView.as_view(), name='student-register'),
@@ -9,4 +18,5 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('admin/register/', AdminRegistrationView.as_view(), name='admin-register'),
     path('admin/login/', AdminLoginView.as_view(), name='admin-login'),
-]
+] + router.urls  
+
