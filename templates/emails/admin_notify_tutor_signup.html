@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Tutor Registration - AfriLingua</title>
+    <style>
+      body {
+        font-family: 'Helvetica', Arial, sans-serif;
+        background-color: #f9fafb;
+        color: #333;
+        padding: 40px 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+      .header {
+        background-color: #047857;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+      }
+      .content {
+        padding: 30px;
+      }
+      .button {
+        display: inline-block;
+        background-color: #047857;
+        color: #fff !important;
+        padding: 10px 22px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 12px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 13px;
+        color: #6b7280;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>New Tutor Registration Alert</h1>
+      </div>
+      <div class="content">
+        <p>Hello Admin,</p>
+
+        <p>A new tutor has just registered on <strong>AfriLingua</strong> and is awaiting your approval.</p>
+
+        <ul>
+          <li><strong>Name:</strong> {{ tutor.user.get_full_name }}</li>
+          <li><strong>Email:</strong> {{ tutor.user.email }}</li>
+          <li><strong>Joined:</strong> {{ tutor.created_at|date:"F j, Y, g:i a" }}</li>
+        </ul>
+
+        <p>Please review and approve their application in the Admin Dashboard:</p>
+
+        <p style="text-align: center;">
+          <a href="{{ admin_dashboard_link }}" class="button">Review Tutor Application</a>
+        </p>
+
+        <p>Regards,<br />AfriLingua System Bot 🤖</p>
+      </div>
+      <div class="footer">
+        <p>© {{ year }} AfriLingua — Admin Notification</p>
+      </div>
+    </div>
+  </body>
+</html>

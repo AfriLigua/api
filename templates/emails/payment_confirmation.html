@@ -1,0 +1,13 @@
+{% extends "emails/base_email.html" %}
+{% block content %}
+  <h2 style="color:#1B3C73;">Payment Confirmed ✅</h2>
+  <p style="font-size:16px;">
+    Dear {{ user_name }}, your payment of <strong>${{ amount }}</strong> for your
+    lesson with <strong>{{ tutor_name }}</strong> has been received.
+  </p>
+  <p style="font-size:16px;">You’ll receive your meeting link shortly before your scheduled lesson.</p>
+  <a href="{{ booking_link }}"
+    style="display:inline-block;padding:12px 20px;background-color:#F7C948;color:#1B3C73;text-decoration:none;font-weight:bold;border-radius:6px;">
+    View Booking
+  </a>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base_email.html" %}
+{% block content %}
+<h2>Withdrawal Request Submitted 💵</h2>
+<p>Hello {{ tutor_name }}, we’ve received your withdrawal request for <strong>${{ amount }}</strong>.</p>
+<p>Funds will be processed and transferred to your Wise/PayPal account within 3–5 business days.</p>
+{% endblock %}

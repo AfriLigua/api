@@ -1,0 +1,10 @@
+{% extends "emails/base_email.html" %}
+{% block content %}
+  <h2 style="color:#1B3C73;">New Message 💬</h2>
+  <p>You’ve received a new message from <strong>{{ sender_name }}</strong>:</p>
+  <blockquote style="border-left:3px solid #F7C948;padding-left:10px;color:#555;">{{ message_excerpt }}</blockquote>
+  <a href="{{ chat_link }}"
+    style="display:inline-block;padding:12px 20px;background-color:#1B3C73;color:white;text-decoration:none;font-weight:bold;border-radius:6px;">
+    Reply Now
+  </a>
+{% endblock %}

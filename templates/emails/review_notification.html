@@ -1,0 +1,8 @@
+{% extends "base_email.html" %}
+{% block content %}
+<h2>New Review Received 🌟</h2>
+<p>Congratulations {{ tutor_name }}! A student has left a new review for your recent lesson.</p>
+<p><strong>Rating:</strong> {{ rating }}/5<br>
+<strong>Comment:</strong> "{{ comment }}"</p>
+<a class="btn" href="{{ profile_link }}">View Reviews</a>
+{% endblock %}

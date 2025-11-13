@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Verify your AfriLingua account</title>
+    <style>
+      body {
+        font-family: 'Helvetica', Arial, sans-serif;
+        background-color: #f9fafb;
+        color: #333;
+        padding: 40px 0;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+      .header {
+        background-color: #2563eb;
+        color: #fff;
+        text-align: center;
+        padding: 20px;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .content {
+        padding: 30px;
+      }
+      .content h2 {
+        color: #111827;
+        font-size: 20px;
+        margin-top: 0;
+      }
+      .button {
+        display: inline-block;
+        background-color: #2563eb;
+        color: #fff !important;
+        padding: 12px 24px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 16px;
+      }
+      .footer {
+        text-align: center;
+        font-size: 13px;
+        color: #6b7280;
+        padding: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Welcome to AfriLingua!</h1>
+      </div>
+      <div class="content">
+        <h2>Hello {{ user.email }},</h2>
+        <p>Thank you for joining <strong>AfriLingua</strong> — your gateway to mastering African languages and culture.</p>
+
+        <p>Please confirm your email address by clicking the button below:</p>
+
+        <p style="text-align: center;">
+          <a href="{{ verification_link }}" class="button">Verify Email</a>
+        </p>
+
+        <p>If you didn’t create an account, you can safely ignore this email.</p>
+
+        <p>Warm regards,<br />The AfriLingua Team 🌍</p>
+      </div>
+      <div class="footer">
+        <p>© {{ year }} AfriLingua — All rights reserved</p>
+      </div>
+    </div>
+  </body>
+</html>

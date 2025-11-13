@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AfriLingua Admin Login Alert</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333;">
+  <h2>Hello {{ user.first_name }},</h2>
+  <p>This is a quick security notice: Your admin account logged in successfully at {{ now|default:"the recent time" }}.</p>
+  <p>If this wasn’t you, please reset your password immediately.</p>
+  <p><a href="https://afrilingua.com/reset-password">Reset Password</a></p>
+  <br>
+  <p>— AfriLingua Security Team</p>
+</body>
+</html>

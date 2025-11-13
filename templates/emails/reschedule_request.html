@@ -1,0 +1,7 @@
+{% extends "base_email.html" %}
+{% block content %}
+<h2>Reschedule Request 📅</h2>
+<p>{{ requester_name }} has requested to reschedule the lesson originally set for {{ old_date }}.</p>
+<p><strong>Reason:</strong> "{{ reason }}"</p>
+<a class="btn" href="{{ review_link }}">Review Request</a>
+{% endblock %}

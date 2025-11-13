@@ -1,0 +1,15 @@
+{% extends "emails/base_email.html" %}
+{% block content %}
+  <h2 style="color:#1B3C73;margin-top:0;">Welcome to AfriLingua, {{ student_name }}!</h2>
+  <p style="font-size:16px;line-height:1.6;color:#333;">
+    We’re thrilled to have you join the AfriLingua community! Start exploring
+    tutors, book lessons, and dive into the beauty of African languages and
+    culture.
+  </p>
+  <p>
+    <a href="https://afrilingua.com/login"
+      style="display:inline-block;padding:12px 20px;background-color:#F7C948;color:#1B3C73;text-decoration:none;font-weight:bold;border-radius:6px;">
+      Get Started
+    </a>
+  </p>
+{% endblock %}

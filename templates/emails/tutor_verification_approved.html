@@ -1,0 +1,22 @@
+{% extends "emails/base_email.html" %}
+{% block content %}
+  <h2 style="color:#1B3C73;">🎉 Congratulations, {{ tutor_name }}!</h2>
+  <p style="font-size:16px;line-height:1.6;color:#333;">
+    Great news — your AfriLingua tutor profile has been successfully <strong>approved</strong> by our admin council.
+  </p>
+
+  <p style="font-size:16px;">
+    You can now log in to your <strong>Tutor Dashboard</strong>, set your lesson prices, and start accepting student bookings.
+  </p>
+
+  <p>
+    <a href="https://afrilingua.com/tutor/dashboard"
+      style="display:inline-block;padding:12px 20px;background-color:#1B3C73;color:white;text-decoration:none;font-weight:bold;border-radius:6px;">
+      Go to Dashboard
+    </a>
+  </p>
+
+  <p style="color:#555;margin-top:20px;">
+    Welcome aboard! We're excited to see you inspire students around the world.
+  </p>
+{% endblock %}
