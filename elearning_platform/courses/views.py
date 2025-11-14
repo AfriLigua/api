@@ -4,8 +4,10 @@ from .serializers import CourseSerializer, CourseListSerializer, LessonSerialize
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    queryset = Course.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        return Course.objects.select_related('created_by').all()
     
     def get_serializer_class(self):
         if self.action == 'list':
@@ -17,6 +19,8 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 
 class LessonViewSet(viewsets.ModelViewSet):
-    queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    
+    def get_queryset(self):
+        return Lesson.objects.select_related('course').all()

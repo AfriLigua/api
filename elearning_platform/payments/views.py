@@ -4,18 +4,24 @@ from .serializers import PaymentSerializer, TutorWalletSerializer, WithdrawalReq
 
 
 class PaymentViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return Payment.objects.select_related('user', 'booking').all()
 
 
 class TutorWalletViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = TutorWallet.objects.all()
     serializer_class = TutorWalletSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return TutorWallet.objects.select_related('tutor').all()
 
 
 class WithdrawalRequestViewSet(viewsets.ModelViewSet):
-    queryset = WithdrawalRequest.objects.all()
     serializer_class = WithdrawalRequestSerializer
     permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return WithdrawalRequest.objects.select_related('tutor').all()

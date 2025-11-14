@@ -118,7 +118,11 @@ class TutorProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='tutor_profile')
     bio = models.TextField(blank=True)
     skills = models.TextField(blank=True)
+    languages = models.CharField(max_length=255, blank=True, help_text='Comma-separated languages taught')
     price_per_lesson = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    hourly_rate = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text='Hourly rate in USD')
+    total_hours_taught = models.DecimalField(max_digits=10, decimal_places=2, default=0.00, help_text='Total hours taught across all students')
+    instant_booking = models.BooleanField(default=False, help_text='Allow students to instantly book without approval')
     approval_status = models.CharField(max_length=20, choices=APPROVAL_STATUS_CHOICES, default='pending')
     cv = models.FileField(upload_to='tutors/cvs/', blank=True, null=True)
     certificate = models.FileField(upload_to='tutors/certificates/', blank=True, null=True)
@@ -143,6 +147,20 @@ class TutorProfile(models.Model):
         self.total_ratings += 1
         self.rating = (total + new_rating) / self.total_ratings
         self.save()
+    
+    def get_commission_rate(self):
+        if self.total_hours_taught < 50:
+            return 0.33
+        elif self.total_hours_taught < 100:
+            return 0.28
+        elif self.total_hours_taught < 200:
+            return 0.23
+        else:
+            return 0.18
+    
+    def add_teaching_hours(self, hours):
+        self.total_hours_taught += hours
+        self.save()
 
 
 class StudentProfile(models.Model):
@@ -161,3 +179,22 @@ class StudentProfile(models.Model):
     
     def __str__(self):
         return f"{self.user.email} - Student Profile"
+
+
+class AdminProfile(models.Model):
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='admin_profile')
+    department = models.CharField(max_length=100, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    can_approve_tutors = models.BooleanField(default=True)
+    can_manage_payments = models.BooleanField(default=True)
+    can_manage_users = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        db_table = 'admin_profiles'
+        verbose_name = 'Admin Profile'
+        verbose_name_plural = 'Admin Profiles'
+    
+    def __str__(self):
+        return f"{self.user.email} - Admin Profile"

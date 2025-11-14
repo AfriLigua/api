@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Payment, TutorWallet, WithdrawalRequest
+from .models import Payment, TutorWallet, WithdrawalRequest, Transaction
 
 
 @admin.register(Payment)
@@ -24,3 +24,10 @@ class WithdrawalRequestAdmin(admin.ModelAdmin):
     
     def approve_withdrawals(self, request, queryset):
         queryset.update(status='approved')
+
+
+@admin.register(Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'transaction_type', 'user', 'amount', 'commission_rate', 'net_amount', 'status', 'created_at']
+    list_filter = ['transaction_type', 'status', 'payment_provider']
+    search_fields = ['user__email', 'provider_transaction_id']

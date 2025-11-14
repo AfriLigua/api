@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, TutorProfile, StudentProfile
+from .models import CustomUser, TutorProfile, StudentProfile, AdminProfile
 
 
 @admin.register(CustomUser)
@@ -44,3 +44,10 @@ class StudentProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'country', 'language', 'currency', 'created_at']
     list_filter = ['currency', 'country']
     search_fields = ['user__email', 'country']
+
+
+@admin.register(AdminProfile)
+class AdminProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'department', 'can_approve_tutors', 'can_manage_payments', 'can_manage_users', 'created_at']
+    list_filter = ['can_approve_tutors', 'can_manage_payments', 'can_manage_users']
+    search_fields = ['user__email', 'department']
